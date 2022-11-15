@@ -7,24 +7,34 @@ struct node {
     struct node *next;
 };
 
-//reverse function
-static void reverse(struct node** head)
+//reverse structure
+struct node *chunkReverse(struct node *head, int k)
 {
-    struct node* prev = NULL;
-    struct node* curr = *head;
+    if (!head)
+        return NULL;
+   
+    struct node* curr = head;
     struct node* next = NULL;
-    while (curr != NULL) {
-        //storing next
-        next = curr->next;
- 
-        //reversing current node's pointer
+    struct node* prev = NULL;
+    int count = 0;
+     
+    /*reversing first k nodes of the linked list */
+    while (curr != NULL && count < k)
+    {
+        next  = curr->next;
         curr->next = prev;
- 
-        // moving pointers one position ahead.
         prev = curr;
         curr = next;
+        count++;
     }
-    *head = prev;
+     
+    /* next is now a pointer to (k+1)th node
+       Recursively call for the list starting from current.*/
+    if (next !=  NULL)
+       head->next = chunkReverse(next, k);
+    
+    /* prev is new head */
+    return prev;
 }
 
 //printing the Linked List
@@ -64,6 +74,11 @@ int main(){
         prev = p;
     }
     printLinkedList(head);
-    reverse(&head);
+    
+    int k;
+    printf("Enter chunk size from 1 to n: ");
+    scanf("%d", &k);
+    head = chunkReverse(head, k);
     printLinkedList(head);
+    return 0;
 }
