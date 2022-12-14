@@ -15,31 +15,26 @@ void printLinkedList(struct node *p) {
   }
 }
 
-void insertNode(struct node **sortedList, struct node *new){
-    if (*sortedList == NULL || (*sortedList)->val > new->val){
-        new->next = *sortedList;
-        *sortedList = new;
-    } else {
-        struct node *i = *sortedList;
-        while (i->next != NULL && i->next->val <= new->val){
+void sortLinkedList(struct node *p) {
+    
+    struct node* curr = p;
+  
+    while (curr) {
+        struct node* min = curr;
+        struct node* i = curr->next;
+  
+        while (i) {
+            if (min-> val > i-> val)
+                min = i;
+  
             i = i->next;
         }
-        new->next = i->next;
-        i->next = new;
+  
+        int t = curr->val;
+        curr->val = min->val;
+        min->val = t;
+        curr = curr->next;
     }
-}
-
-void sortLinkedList(struct node **p) {
-    struct node *curr=*p;
-    struct node *sorted=NULL;
-
-    while (curr!=NULL){
-        struct node *d = curr->next;
-        insertNode(&sorted, curr);
-        curr=d;
-    }
-
-    *p = sorted;
 }
 
 int main(){
@@ -72,7 +67,7 @@ int main(){
     }
     printf("Input:");
     printLinkedList(head);
-    sortLinkedList(&head);
+    sortLinkedList(head);
     printf("Output:");
     printLinkedList(head);
 }
